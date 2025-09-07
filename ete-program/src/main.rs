@@ -1,4 +1,4 @@
-use std::{io, ops::Deref};
+use std::io;
 
 #[derive(PartialEq)]
 enum MealPreference {
@@ -51,6 +51,7 @@ fn read_input(passengers: &mut Vec<Passenger>) {
         io::stdin()
             .read_line(&mut temp_pass.name)
             .expect("didn't work lmao");
+        temp_pass.name = temp_pass.name.trim().to_string();
         println!("Meal Preference for Passenger #{}", i + 1);
         io::stdin().read_line(&mut temp_meal).unwrap();
         match temp_meal.trim() {
@@ -109,8 +110,10 @@ fn display_veg_manifest(passengers: &Vec<Passenger>) {
 fn display_nonveg_manifest(passengers: &Vec<Passenger>) {
     println!("------------------\nNon-Veg Manifest\n------------------");
     for i in 0..passengers.len() {
-        println!("Passenger #{}", i + 1);
-        println!("Name: {}", passengers[i].name);
+        if passengers[i].meal_preference == MealPreference::NONVEG {
+            println!("Passenger #{}", i + 1);
+            println!("Name: {}", passengers[i].name);
+        }
     }
     println!("\n");
 }
@@ -156,63 +159,48 @@ fn count_meal_prefs(passengers: &Vec<Passenger>) {
 
 // Group people based on Meal Preferences
 fn group_on_meal_prefs(passengers: &Vec<Passenger>) {
-    let mut veg_pass: Vec<&Passenger> = Vec::new();
-    let mut nonveg_pass: Vec<&Passenger> = Vec::new();
-    let mut vegan_pass: Vec<&Passenger> = Vec::new();
-    let mut jain_pass: Vec<&Passenger> = Vec::new();
-    let mut gltnfr_pass: Vec<&Passenger> = Vec::new();
-    let mut kids_pass: Vec<&Passenger> = Vec::new();
-    for i in 0..passengers.len() {
-        let temp: &Passenger = &passengers[i];
-        match passengers[i].meal_preference {
-            MealPreference::VEG => {
-                veg_pass.push(temp);
-            }
-            MealPreference::NONVEG => {
-                nonveg_pass.push(temp);
-            }
-            MealPreference::VEGAN => {
-                vegan_pass.push(temp);
-            }
-            MealPreference::JAIN => {
-                jain_pass.push(temp);
-            }
-            MealPreference::GLUTENFREE => {
-                gltnfr_pass.push(temp);
-            }
-            MealPreference::KIDS => {
-                kids_pass.push(temp);
-            }
+    println!("\n------\nSorted on Meal Preferences\n------\n");
+    for pref in [
+        MealPreference::VEG,
+        MealPreference::NONVEG,
+        MealPreference::VEGAN,
+        MealPreference::JAIN,
+        MealPreference::GLUTENFREE,
+        MealPreference::KIDS,
+    ] {
+        let filtered: Vec<_> = passengers
+            .iter()
+            .filter(|p| p.meal_preference == pref)
+            .collect();
+        // Display filtered passengers
+        for item in filtered {
+            println!("- {}: {}", item.name, as_a_string(&item.meal_preference));
         }
     }
-    println!("\nGrouped on Meal Prefs:\n");
-    for i in 0..veg_pass.len() {
-        println!("{}", veg_pass[i].deref().name);
-    }
-    for i in 0..nonveg_pass.len() {
-        println!("{}", nonveg_pass[i].deref().name);
-    }
-    for i in 0..vegan_pass.len() {
-        println!("{}", vegan_pass[i].deref().name);
-    }
-    for i in 0..jain_pass.len() {
-        println!("{}", jain_pass[i].deref().name);
-    }
-    for i in 0..gltnfr_pass.len() {
-        println!("{}", gltnfr_pass[i].deref().name);
-    }
-    for i in 0..kids_pass.len() {
-        println!("{}", kids_pass[i].deref().name);
-    }
-    println!("\n");
+}
+// Sort people based on their names
+fn sort_on_names(passengers: &mut Vec<Passenger>) {
+    passengers.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
 }
 
 fn main() {
     let mut passengers: Vec<Passenger> = Vec::new();
+    // Read input: mutable reference
     read_input(&mut passengers);
+    // Count of people under each Meal Prefs
     count_meal_prefs(&passengers);
+    // Display Main Manifest
     display_main_manifest(&passengers);
+    // Display Veg Manifest
     display_veg_manifest(&passengers);
+    // Display Non-Veg Manifest
     display_nonveg_manifest(&passengers);
+    // Group people based on meal prefs
     group_on_meal_prefs(&passengers);
+    // Sort people based on their names
+    sort_on_names(&mut passengers);
+    // Display Sorted Manifest
+    println!("\n.....Sorting by Names.....\n");
+    println!("\n.....Displaying Manifest after Sorting.....\n");
+    display_main_manifest(&passengers);
 }
