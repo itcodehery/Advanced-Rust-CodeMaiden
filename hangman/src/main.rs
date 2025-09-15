@@ -64,8 +64,10 @@ fn main() {
     // repeated guess
     while count != 0 {
         current_guess.clear();
+
         println!("\nEnter your guess: ");
         stdin().read_line(&mut current_guess).unwrap();
+
         let current_guess = current_guess.trim().parse::<char>().unwrap();
         guesses.push(current_guess);
         if !word_chars.contains(&current_guess) {
