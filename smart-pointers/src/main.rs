@@ -6,7 +6,11 @@
 // - Reference Counting Values
 // - Reference Cell
 
-use std::{cell::RefCell, rc::Rc, sync::Arc};
+use std::{
+    cell::RefCell,
+    rc::{Rc, Weak},
+    sync::Arc,
+};
 
 fn main() {
     // Referencing and Dereferencing
@@ -39,6 +43,10 @@ fn main() {
     *c.borrow_mut() = 20;
     let d = Rc::clone(&b);
     println!("Multiple owners, Mutable Access: {:?} and {:?}", c, d);
+    //    ### Weak<T>: A weak friendship between the clone and the original
+    //    Doesn't count the reference from the Weak<> as a Reference.
+    let e = Rc::downgrade(&d);
+    println!("Printing E: {:?}", e.as_ptr());
     //    ### Arc: Atomic Reference Counting
 
     // Arc is a smart pointer that stands for Atomically Reference-Counted. Its main purpose
