@@ -1,17 +1,30 @@
-// Merge Subroutine
+use std::io;
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    next: Option<Box<Node>>,
+}
+
 fn main() {
-    // Given two sorted arrays, merge them
-    let arr = [1, 2, 3];
-    let arr2 = [2, 5, 6];
-    let mut res: [i32; 6] = [42; 6];
-    for i in 0..arr.len() {
-        for j in 0..arr2.len() {
-            if arr[i] < arr2[j] {
-                // Insert into arr at index i
-                res[i] = arr[i];
-            }
+    let mut str = String::new();
+    println!("Enter an element: ");
+    io::stdin().read_line(&mut str).unwrap();
+    let str = str.trim();
+    let str: i32 = match str.parse() {
+        Ok(res) => res,
+        Err(r) => {
+            println!("Couldn't parse error!");
+            return;
+        }
+    };
+    let head: Node = Node {
+        value: str,
+        next: None,
+    };
+    for i in 1..5 {
+        if i != 4 {
+            println!("Do you want to add another node?");
         }
     }
-
-    println!("{:?}", res);
 }
