@@ -20,22 +20,30 @@ impl DNode {
 
 fn main() {
     let mut head = DNode::new(0);
-    let mut current = &mut head;
-    while current.next.is_some() {
-        current = current.next.as_mut().unwrap();
-    }
+
     let mut choice = 1;
     println!("Enter an integer value: ");
     let mut inp: i32 = read!();
     head.prev = None;
     head.value = inp;
     head.next = None;
+    let mut current = &mut head;
+    let prev = &head;
+    while current.next.is_some() {
+        current = current.next.as_mut().unwrap();
+    }
     while choice == 1 {
         println!("Do you want to add another node? ");
         choice = read!();
         if choice == 0 {
             current.next = None;
             break;
+        } else {
+            println!("Enter an integer: ");
+            let int: i32 = read!();
+            let new_node = DNode::new(int);
+            current.next = Some(Box::new(new_node));
+            current = current.next.as_mut().unwrap();
         }
     }
 }

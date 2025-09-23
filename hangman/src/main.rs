@@ -17,6 +17,7 @@ fn is_subset_of(guesses: &Vec<char>, main_set: &Vec<char>) -> bool {
 fn choose_random_string() -> String {
     let words: Vec<&str> = vec![
         "Inception",
+        "Charlie's Angels",
         "Interstellar",
         "The Dark Knight",
         "Joker",
