@@ -1,59 +1,69 @@
+// Singly Linked List Implementation in Rust
 use text_io::read;
 
 #[derive(Debug, Clone)]
-struct Node {
-    next: Option<Box<Node>>,
-    value: String,
+struct DNode {
+    value: i32,
+    next: Option<Box<DNode>>,
 }
 
-impl Node {
-    fn new(value: String) -> Self {
-        Self { value, next: None }
+impl DNode {
+    fn new(value: i32) -> Self {
+        Self {
+            value: value,
+            next: None,
+        }
     }
 }
 
-fn main() {
-    // Variables
-    let mut choice: i32 = 1;
-    let mut head = Node::new(String::from(""));
-    let mut current = &mut head;
-    // IO Initial Input
-    println!("Enter a string: ");
-    let mut str: String = read!();
-    // Move to the end
+fn insert_at_beginning(head: &mut DNode) {
+    println!("\nEnter the element to be inserted: ");
+    let inp: i32 = read!();
+    let mut new_node = DNode::new(inp);
+    new_node.next = Some(Box::new(head.clone()));
+    *head = new_node;
+    println!("The element {} has been inserted!", inp);
+}
+
+fn read_ll(head: &mut DNode) {
+    let mut choice = 1;
+    println!("Enter an integer value: ");
+    let inp: i32 = read!();
+    head.value = inp;
+    head.next = None;
+    let mut current = head;
     while current.next.is_some() {
         current = current.next.as_mut().unwrap();
     }
-    // Set Head Value
-    current.value = str.clone();
     while choice == 1 {
-        str.clear();
-        // IO Choice Input
         println!("Do you want to add another node? ");
         choice = read!();
-        println!("Choice is {}", choice);
         if choice == 0 {
             current.next = None;
             break;
         } else {
-            // IO Iterative Input
-            println!("Enter a string: ");
-            str = read!();
-            let new_node = Node::new(str.clone());
+            println!("Enter an integer: ");
+            let int: i32 = read!();
+            let new_node = DNode::new(int);
             current.next = Some(Box::new(new_node));
             current = current.next.as_mut().unwrap();
         }
     }
-
-    // Display nodes
-    display_nodes(&mut head);
 }
 
-fn display_nodes(head: &mut Node) {
+fn display_ll(head: &mut DNode) {
     let mut current = head;
     while current.next.is_some() {
         print!("{} -> ", current.value);
         current = current.next.as_mut().unwrap();
     }
-    print!("X");
+    print!("{} -> X", current.value);
+}
+
+fn main() {
+    let mut head = DNode::new(0);
+    read_ll(&mut head);
+    display_ll(&mut head);
+    insert_at_beginning(&mut head);
+    display_ll(&mut head);
 }

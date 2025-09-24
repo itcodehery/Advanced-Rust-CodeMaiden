@@ -1,7 +1,8 @@
 // Doubly Linked List Implementation in Rust
 use text_io::read;
 
-#[derive(Debug, Clone)]
+#[allow(dead_code)]
+#[derive(Clone)]
 struct DNode {
     prev: Option<Box<DNode>>,
     value: i32,
@@ -18,17 +19,45 @@ impl DNode {
     }
 }
 
-fn main() {
-    let mut head = DNode::new(0);
+fn insert_at_beginning(head: &mut DNode) {
+    println!("\nEnter the element to be inserted: ");
+    let inp: i32 = read!();
+    let mut new_node = DNode::new(inp);
+    new_node.next = Some(Box::new(head.clone()));
+    *head = new_node;
+    println!("The element {} has been inserted!", inp);
+}
 
+fn count(head: &mut DNode) -> i32 {
+    let mut current = head;
+    let mut count = 0;
+    while current.next.is_some() {
+        count += 1;
+        current = current.next.as_mut().unwrap();
+    }
+    count += 1;
+    count
+}
+
+fn push(head: &mut DNode) {
+    println!("\nEnter the element to be pushed: ");
+    let inp: i32 = read!();
+    let mut current = head;
+    while current.next.is_some() {
+        current = current.next.as_mut().unwrap();
+    }
+    let new_node = DNode::new(inp);
+    current.next = Some(Box::new(new_node));
+    println!("Element {} successfully pushed!", inp);
+}
+
+fn read_ll(head: &mut DNode) {
     let mut choice = 1;
     println!("Enter an integer value: ");
-    let mut inp: i32 = read!();
-    head.prev = None;
+    let inp: i32 = read!();
     head.value = inp;
     head.next = None;
-    let mut current = &mut head;
-    let prev = &head;
+    let mut current = head;
     while current.next.is_some() {
         current = current.next.as_mut().unwrap();
     }
@@ -46,4 +75,24 @@ fn main() {
             current = current.next.as_mut().unwrap();
         }
     }
+}
+
+fn display_ll(head: &mut DNode) {
+    let mut current = head;
+    while current.next.is_some() {
+        print!("{} -> ", current.value);
+        current = current.next.as_mut().unwrap();
+    }
+    print!("{} -> X", current.value);
+}
+
+fn main() {
+    let mut head = DNode::new(0);
+    read_ll(&mut head);
+    display_ll(&mut head);
+    insert_at_beginning(&mut head);
+    display_ll(&mut head);
+    push(&mut head);
+    display_ll(&mut head);
+    println!("\nNumber of elements in linked list: {} ", count(&mut head));
 }
