@@ -2,30 +2,65 @@
 use text_io::read;
 
 #[derive(Debug, Clone)]
-struct DNode {
+struct Node {
     value: i32,
-    next: Option<Box<DNode>>,
+    next: Option<Box<Node>>,
 }
 
-impl DNode {
-    fn new(value: i32) -> Self {
-        Self {
+impl Node {
+    fn new(value: i32) -> Node {
+        Node {
             value: value,
             next: None,
         }
     }
 }
 
-fn insert_at_beginning(head: &mut DNode) {
+fn count(head: &mut Node) -> i32 {
+    let mut count = 1;
+    let mut current = head;
+    while current.next.is_some() {
+        count += 1;
+        current = current.next.as_mut().unwrap();
+    }
+    count
+}
+
+fn insert_at_beginning(head: &mut Node) {
     println!("\nEnter the element to be inserted: ");
     let inp: i32 = read!();
-    let mut new_node = DNode::new(inp);
+    let mut new_node = Node::new(inp);
     new_node.next = Some(Box::new(head.clone()));
     *head = new_node;
     println!("The element {} has been inserted!", inp);
 }
 
-fn read_ll(head: &mut DNode) {
+// fn insert_at_position(head: &mut Node) {
+//     println!("\nEnter the element to be inserted: ");
+//     let inp: i32 = read!();
+//     println!("Enter the index to insert at: ");
+//     let index: i32 = read!();
+//     let index = count(head) - index;
+//     let mut current = head;
+//     for _ in 0..=index {
+//         current = current.next.as_mut().unwrap();
+//     }
+//     let mut new_node = Node::new(inp);
+//     let temp = &current.next;
+//     current.next = Some(Box::new(new_node));
+//     new_node.next = temp;
+// }
+fn delete_at_position(head: &mut Node) {
+    println!("\nEnter the position to delete the node: ");
+    let inp: i32 = read!();
+    let mut current = head;
+    for _ in 0..=inp {
+        current = current.next.as_mut().unwrap();
+    }
+    let next = &current.next;
+}
+
+fn read_ll(head: &mut Node) {
     let mut choice = 1;
     println!("Enter an integer value: ");
     let inp: i32 = read!();
@@ -44,14 +79,14 @@ fn read_ll(head: &mut DNode) {
         } else {
             println!("Enter an integer: ");
             let int: i32 = read!();
-            let new_node = DNode::new(int);
+            let new_node = Node::new(int);
             current.next = Some(Box::new(new_node));
             current = current.next.as_mut().unwrap();
         }
     }
 }
 
-fn display_ll(head: &mut DNode) {
+fn display_ll(head: &mut Node) {
     let mut current = head;
     while current.next.is_some() {
         print!("{} -> ", current.value);
@@ -61,7 +96,7 @@ fn display_ll(head: &mut DNode) {
 }
 
 fn main() {
-    let mut head = DNode::new(0);
+    let mut head = Node::new(0);
     read_ll(&mut head);
     display_ll(&mut head);
     insert_at_beginning(&mut head);
