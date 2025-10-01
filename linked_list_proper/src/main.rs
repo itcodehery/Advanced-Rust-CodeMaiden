@@ -1,3 +1,5 @@
+use std::default;
+
 // Singly Linked List Implementation in Rust
 use text_io::read;
 
@@ -35,21 +37,6 @@ fn insert_at_beginning(head: &mut Node) {
     println!("The element {} has been inserted!", inp);
 }
 
-// fn insert_at_position(head: &mut Node) {
-//     println!("\nEnter the element to be inserted: ");
-//     let inp: i32 = read!();
-//     println!("Enter the index to insert at: ");
-//     let index: i32 = read!();
-//     let index = count(head) - index;
-//     let mut current = head;
-//     for _ in 0..=index {
-//         current = current.next.as_mut().unwrap();
-//     }
-//     let mut new_node = Node::new(inp);
-//     let temp = &current.next;
-//     current.next = Some(Box::new(new_node));
-//     new_node.next = temp;
-// }
 fn delete_at_position(head: &mut Node) {
     println!("\nEnter the position to delete the node: ");
     let inp: i32 = read!();
