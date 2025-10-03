@@ -1,0 +1,7 @@
+[package]
+name = "ll_stack_rust"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+text_io = "0.1.13"
