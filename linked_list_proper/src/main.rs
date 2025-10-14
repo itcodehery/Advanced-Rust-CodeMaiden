@@ -1,5 +1,3 @@
-use std::default;
-
 // Singly Linked List Implementation in Rust
 use text_io::read;
 
@@ -18,7 +16,7 @@ impl Node {
     }
 }
 
-fn count(head: &mut Node) -> i32 {
+fn count(head: &mut Node) -> u32 {
     let mut count = 1;
     let mut current = head;
     while current.next.is_some() {
@@ -26,6 +24,15 @@ fn count(head: &mut Node) -> i32 {
         current = current.next.as_mut().unwrap();
     }
     count
+}
+
+fn kth_from_end(head: &mut Node, k: u32) {
+    let count = count(head);
+    let mut current = head;
+    for _ in 0..(count - k) {
+        current = current.next.as_mut().unwrap();
+    }
+    println!("\nThe kth element from the end is {}", &current.value);
 }
 
 fn insert_at_beginning(head: &mut Node) {
@@ -37,6 +44,7 @@ fn insert_at_beginning(head: &mut Node) {
     println!("The element {} has been inserted!", inp);
 }
 
+/*
 fn delete_at_position(head: &mut Node) {
     println!("\nEnter the position to delete the node: ");
     let inp: i32 = read!();
@@ -44,8 +52,10 @@ fn delete_at_position(head: &mut Node) {
     for _ in 0..=inp {
         current = current.next.as_mut().unwrap();
     }
-    let next = &current.next;
+    let next = &mut current.next;
+    current = next.as_mut().unwrap();
 }
+*/
 
 fn read_ll(head: &mut Node) {
     let mut choice = 1;
@@ -88,4 +98,5 @@ fn main() {
     display_ll(&mut head);
     insert_at_beginning(&mut head);
     display_ll(&mut head);
+    kth_from_end(&mut head, 2);
 }
