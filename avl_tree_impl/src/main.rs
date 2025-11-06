@@ -26,6 +26,10 @@ impl AVLNode {
     fn height(&self) -> i32 {
         return self.height;
     }
+
+    fn get_balance_factor(&self, parent: &mut AVLNode) -> i32 {
+        parent.height - self.height
+    }
 }
 
 fn create_avl_tree() -> Option<Box<AVLNode>> {
@@ -36,18 +40,22 @@ fn create_avl_tree() -> Option<Box<AVLNode>> {
     Some(Box::new(AVLNode::new(0, value)))
 }
 
+fn perform_left_rotation() {}
+
 fn insert_node(value: i32, parent: &mut AVLNode) {
     if value > parent.value {
         if parent.right.is_some() {
             insert_node(value, &mut parent.right.as_mut().unwrap());
         } else {
             parent.right = Some(Box::new(AVLNode::new(1, value)));
+            println!("Inserted {} to right", &value);
         }
     } else if value < parent.value {
         if parent.left.is_some() {
             insert_node(value, &mut parent.left.as_mut().unwrap());
         } else {
             parent.left = Some(Box::new(AVLNode::new(1, value)));
+            println!("Inserted {} to left", &value);
         }
     } else if value == parent.value {
         println!("Duplicates not allowed!");
@@ -56,21 +64,23 @@ fn insert_node(value: i32, parent: &mut AVLNode) {
     }
 }
 
-fn display_tree(root: &Option<Box<AVLNode>>) {
-    // Perform inorder traversal
-    let mut current = root.as_ref();
-    while current.is_some() {
-        current = current.unwrap().left.as_ref();
-        println!("{}", current.unwrap().value);
-        current = current.unwrap().right.as_ref();
-    }
-}
+// fn display_tree(root: &Option<Box<AVLNode>>) {
+//     // Perform inorder traversal
+//     let mut current = root.as_ref();
+//     while current.is_some() {
+//         current = current.unwrap().left.as_ref();
+//         println!("{}", current.unwrap().value);
+//         current = current.unwrap().right.as_ref();
+//     }
+// }
 
 fn main() {
     let mut head = create_avl_tree();
     let vector = vec![2, 3, 51, 6, 12, 6, 23, 3, 4, 9];
 
     for item in vector {
-        insert_node(item, &mut head.unwrap());
+        insert_node(item, &mut head.as_mut().unwrap());
     }
+
+    // display_tree(&head);
 }
