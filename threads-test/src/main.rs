@@ -64,6 +64,7 @@ fn process_tracks(tracks: &Vec<Track>) {
     for track in tracks {
         track.play();
     }
+    println!("Finished processing");
 }
 
 fn main() {

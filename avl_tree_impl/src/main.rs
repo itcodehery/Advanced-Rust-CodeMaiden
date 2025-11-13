@@ -7,28 +7,42 @@
 use std::io::stdin;
 
 struct AVLNode {
-    height: i32,
     value: i32,
     left: Option<Box<AVLNode>>,
     right: Option<Box<AVLNode>>,
+    height: i32,
 }
 
 impl AVLNode {
     fn new(height: i32, value: i32) -> Self {
         Self {
-            height,
             value,
+            height: height,
             left: None,
             right: None,
         }
     }
 
-    fn height(&self) -> i32 {
-        return self.height;
-    }
-
-    fn get_balance_factor(&self, parent: &mut AVLNode) -> i32 {
-        parent.height - self.height
+    fn get_balance_factor(&self) -> i32 {
+        let factor: i32;
+        // If node is a leaf
+        if self.left.is_none() && self.right.is_none() {
+            factor = 0;
+        }
+        // If node has only right
+        else if self.left.is_none() {
+            factor = self.right.as_ref().unwrap().get_balance_factor();
+        }
+        // If node has only left
+        else if self.right.is_none() {
+            factor = self.left.as_ref().unwrap().get_balance_factor();
+        }
+        // If node has both left and right
+        else {
+            factor = self.left.as_ref().unwrap().get_balance_factor()
+                - self.right.as_ref().unwrap().get_balance_factor();
+        }
+        factor
     }
 }
 
@@ -40,29 +54,9 @@ fn create_avl_tree() -> Option<Box<AVLNode>> {
     Some(Box::new(AVLNode::new(0, value)))
 }
 
-fn perform_left_rotation() {}
+fn perform_left_rotation(node: AVLNode) {}
 
-fn insert_node(value: i32, parent: &mut AVLNode) {
-    if value > parent.value {
-        if parent.right.is_some() {
-            insert_node(value, &mut parent.right.as_mut().unwrap());
-        } else {
-            parent.right = Some(Box::new(AVLNode::new(1, value)));
-            println!("Inserted {} to right", &value);
-        }
-    } else if value < parent.value {
-        if parent.left.is_some() {
-            insert_node(value, &mut parent.left.as_mut().unwrap());
-        } else {
-            parent.left = Some(Box::new(AVLNode::new(1, value)));
-            println!("Inserted {} to left", &value);
-        }
-    } else if value == parent.value {
-        println!("Duplicates not allowed!");
-    } else {
-        println!("Invalid value!");
-    }
-}
+fn insert_node(value: i32, parent: &mut AVLNode) {}
 
 // fn display_tree(root: &Option<Box<AVLNode>>) {
 //     // Perform inorder traversal
