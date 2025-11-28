@@ -47,7 +47,11 @@
 // Total failed downloads
 // Total bytes downloaded
 // Total time taken
-use std::{thread, time::Duration};
+use std::{
+    sync::{Arc, Mutex},
+    thread,
+    time::Duration,
+};
 use text_io::*;
 
 struct File {
@@ -81,43 +85,21 @@ fn main() {
         files.push(file);
     }
 
-    // let r_state = ;
+    let ref_files = Arc::new(Mutex::new(files));
+
     let worker1 = thread::spawn(move || {
-        for mut file in files {
+        let guard = ref_files.lock();
+        for file in guard.unwrap().iter_mut() {
             if !file.processed {
                 println!("Processing {}", file.name);
                 println!("Size of file: {}", file.size);
 
-                thread::sleep(Duration::from_secs(file.size.into()));
+                thread::sleep(Duration::from_secs(file.ttp.into()));
                 file.processed = true;
                 println!();
             }
         }
     });
 
-    let worker2 = thread::spawn(move || {
-        for mut file in files {
-            if !file.processed {
-                println!("Thread #2 Processing {}", file.name);
-                println!("Size of file: {}", file.size);
-
-                thread::sleep(Duration::from_secs(file.size.into()));
-                file.processed = true;
-                println!();
-            }
-        }
-    });
-
-    let worker3 = thread::spawn(move || {
-        for mut file in files {
-            if !file.processed {
-                println!("Thread #3 Processing {}", file.name);
-                println!("Size of file: {}", file.size);
-
-                thread::sleep(Duration::from_secs(file.size.into()));
-                file.processed = true;
-                println!();
-            }
-        }
-    });
+    let _ = worker1.join();
 }
